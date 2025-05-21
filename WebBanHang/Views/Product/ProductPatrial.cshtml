@@ -1,0 +1,53 @@
+﻿<table class="table table-bordered">
+	<tr>
+		<th>Name</th>
+		<th>Price</th>
+		<th>Category</th>
+		<th>Image</th>
+		<th>Action</th>
+	</tr>
+	@foreach (var p in Model)
+	{
+			<tr>
+				<th>@p.Name</th>
+				<th>@p.Price</th>
+				<th>@p.Category.Name</th>
+				<td>
+					<img src="@p.ImageUrl" style="width:150px" />
+				</td>
+				<td>
+							<a asp-action="Update" asp-route-id="@p.Id" class="btn btn-success" type="button"><i class="bi bi-vignette"></i>Edit</a>
+							<a asp-action="Delete" asp-route-id="@p.Id" class="btn btn-danger" type="button"><i class="bi bi-trash2-fill"></i>Delete</a>
+				</td>
+			</tr>
+	}
+</table>
+
+<div>
+	<ul class="pagination justify-content-center">
+		<li class="page-item @(ViewBag.CurrentPage==1?"disabled":"")"> 
+			<a class="page-link"  asp-action="Index" asp-route-page="1" data-page="1"> 
+				&laquo;
+			</a>
+		</li>
+		<li class="page-item @(ViewBag.CurrentPage==1?"disabled":"")"> 
+			<a class="page-link"  asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)" data-page="@(ViewBag.CurrentPage - 1)"> 
+				<
+			</a>
+		</li>
+		@for (var i = 1; i <= ViewBag.PageSum; i++)
+		{ 
+									<li class=" page-item @(ViewBag.CurrentPage==i?"active":"") " > 
+										<a class="page-link" asp-action="Index" asp-route-page="@i" data-page="@i" >@i</a> 
+								</li>	 
+		} 
+		<li class="page-item @(ViewBag.CurrentPage==ViewBag.PageSum?"disabled":"")">
+				<a class="page-link"  asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)" data-page="@(ViewBag.CurrentPage + 1)">></a>
+			</li>
+
+			<li class="page-item @(ViewBag.CurrentPage==ViewBag.PageSum?"disabled":"")">
+				<a class="page-link"  asp-action="Index" asp-route-page="@ViewBag.PageSum" data-page="@ViewBag.PageSum">&raquo;</a>
+			</li>
+	</ul>
+</div>
+
