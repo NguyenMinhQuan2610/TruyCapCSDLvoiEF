@@ -124,7 +124,7 @@ namespace WebBanHang.Controllers
                 //xử lý upload và lưu ảnh đại diện mới
                 product.ImageUrl = SaveImage(ImageUrl);
                 //xóa ảnh cũ (nếu có)
-                if (!string.IsNullOrEmpty(product.ImageUrl))
+                if (string.IsNullOrEmpty(product.ImageUrl))
                 {
                     var oldFilePath = Path.Combine(_hosting.WebRootPath, product.ImageUrl);
                     if (System.IO.File.Exists(oldFilePath))
