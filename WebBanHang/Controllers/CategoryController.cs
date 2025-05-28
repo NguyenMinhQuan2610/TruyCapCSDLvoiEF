@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 using WebBanHang.Models;
 namespace WebBanHang.Controllers
 {
-
+    [Authorize(Roles =SD.Role_Admin)]
     public class CategoryController : Controller
     {
         private ApplicationDbContext _db;
@@ -29,7 +30,7 @@ namespace WebBanHang.Controllers
             //Đọc tất cả sản phẩm trong CSDLthông qua dbcontext
             //var dsSanPham = _db.Products.Where(x=>x.Price>400).OrderBy(p=>p.Price).ToList();//Linq (method syntax)
             //var dsSanPham = (from x in _db.Products where x.Price>400 select x).ToList();//Linq ( query syntax)
-            var dsSanPham = _db.Categoríe.ToList();
+            var dsSanPham = _db.Categorise.ToList();
 
             return View(dsSanPham);
         }
@@ -40,7 +41,7 @@ namespace WebBanHang.Controllers
         {
             //1.Truy vấn sản phẩm cần xóa trong CSDL
 
-            var sp = _db.Categoríe.Find(id); //=> Truy vấn theo khóa chính
+            var sp = _db.Categorise.Find(id); //=> Truy vấn theo khóa chính
             //4.Điều hướng người dùng về lại action index
             return View(sp);
 
@@ -49,7 +50,7 @@ namespace WebBanHang.Controllers
         public IActionResult DeleteConfirm(int id)
         {
             //1.Truy vấn sản phẩm cần xóa trong CSDL
-            var sp = _db.Categoríe.Find(id); //=> Truy vấn theo khóa chính
+            var sp = _db.Categorise.Find(id); //=> Truy vấn theo khóa chính
                                               //Cách 2
             if (_db.Products.Where(x => x.CategoryId == id).ToList().Count() > 0)                        //var sp=_db.Products.Where(x=>x.Id==id).FirstOrDefault();
             {
@@ -58,7 +59,7 @@ namespace WebBanHang.Controllers
             }
             ;
             //2.Thực hiện xóa sản phẩm
-            _db.Categoríe.Remove(sp);
+            _db.Categorise.Remove(sp);
             _db.SaveChanges();
             TempData["success"] = "Xóa sản phẩm thành công";
             //3.Thông báo kết quả thao tác
@@ -72,7 +73,7 @@ namespace WebBanHang.Controllers
         public IActionResult Add(Category product)
         {
 
-            _db.Categoríe.Add(product);
+            _db.Categorise.Add(product);
             _db.SaveChanges();
             TempData["success"] = "Thêm sản phẩm thành công";
 
@@ -91,7 +92,7 @@ namespace WebBanHang.Controllers
         public IActionResult Update(Category product)
         {
             //B1: Truy vấn sản phẩm cần cập nhật trong CSDL
-            var OldProduct = _db.Categoríe.Find(product.Id);
+            var OldProduct = _db.Categorise.Find(product.Id);
 
             //cập nhật product vào table Product
             OldProduct.Name = product.Name;
@@ -108,7 +109,7 @@ namespace WebBanHang.Controllers
         //Hiển thị form cập nhật sản phẩm
         public IActionResult Update(int id)
         {
-            var sp = _db.Categoríe.Find(id);
+            var sp = _db.Categorise.Find(id);
 
             return View(sp);
         }

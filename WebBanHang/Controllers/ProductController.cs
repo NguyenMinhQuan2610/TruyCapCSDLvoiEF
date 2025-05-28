@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebBanHang.Models;
 
 namespace WebBanHang.Controllers
 {
+    [Authorize(Roles=SD.Role_Admin)]
     public class ProductController : Controller
     {
+        
         private ApplicationDbContext _db;
         private IWebHostEnvironment _hosting;
         public ProductController(ApplicationDbContext db, IWebHostEnvironment hosting)
@@ -92,7 +95,7 @@ namespace WebBanHang.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            ViewBag.DSTL = _db.Categoríe.Select(x => new SelectListItem
+            ViewBag.DSTL = _db.Categorise.Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),
                 Text = x.Name
@@ -161,7 +164,7 @@ namespace WebBanHang.Controllers
             //Cách 2: Tìm theo khóa chính
             var sp=_db.Products.Find(id);            
             //truyền danh sách thể loại cho View để sinh ra điều khiển DropDownList
-            ViewBag.CategoryList = _db.Categoríe.Select(x => new SelectListItem
+            ViewBag.CategoryList = _db.Categorise.Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),
                 Text = x.Name

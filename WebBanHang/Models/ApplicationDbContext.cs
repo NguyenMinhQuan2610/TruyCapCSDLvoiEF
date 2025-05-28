@@ -10,7 +10,7 @@ namespace WebBanHang.Models
         {
                 
         }
-        public DbSet<Category> Categoríe { get; set; }
+        public DbSet<Category> Categorise { get; set; }
         public DbSet<Product> Products { set; get; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

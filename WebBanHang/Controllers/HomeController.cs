@@ -18,7 +18,7 @@ namespace WebBanHang.Controllers
         public IActionResult Index()
         {
             var pageSize = 3;
-            var dsSanPham = _db.Products.Include(x => x.Category).ToList();
+            var dsSanPham = _db.Products.Include(x => x.Category ).ToList();
             return View(dsSanPham.Skip(0).Take(pageSize).ToList());
         }
 
