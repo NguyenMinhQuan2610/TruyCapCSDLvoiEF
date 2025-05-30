@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebBanHang.Models;
 
-namespace WebBanHang.Controllers
+namespace WebBanHang.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     [Authorize(Roles=SD.Role_Admin)]
     public class ProductController : Controller
     {
@@ -53,7 +54,7 @@ namespace WebBanHang.Controllers
             var sp = _db.Products.Find(id); //=> Truy vấn theo khóa chính
             //Cách 2
             //var sp=_db.Products.Where(x=>x.Id==id).FirstOrDefault();
-            if (!String.IsNullOrEmpty(sp.ImageUrl))
+            if (!string.IsNullOrEmpty(sp.ImageUrl))
             {
                 var oldFilePath = Path.Combine(_hosting.WebRootPath, sp.ImageUrl);
                 if (System.IO.File.Exists(oldFilePath))
@@ -103,7 +104,7 @@ namespace WebBanHang.Controllers
             return View();
         }
         #endregion
-        private String SaveImage(IFormFile imageUrl)
+        private string SaveImage(IFormFile imageUrl)
         {
             //Đặt lại tên file cần lưu
             var filename = Guid.NewGuid().ToString() + Path.GetExtension(imageUrl.FileName);

@@ -10,8 +10,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WebBanHang.Models;
-namespace WebBanHang.Controllers
+namespace WebBanHang.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     [Authorize(Roles =SD.Role_Admin)]
     public class CategoryController : Controller
     {
@@ -52,7 +53,7 @@ namespace WebBanHang.Controllers
             //1.Truy vấn sản phẩm cần xóa trong CSDL
             var sp = _db.Categorise.Find(id); //=> Truy vấn theo khóa chính
                                               //Cách 2
-            if (_db.Products.Where(x => x.CategoryId == id).ToList().Count() > 0)                        //var sp=_db.Products.Where(x=>x.Id==id).FirstOrDefault();
+            if (_db.Products.Where(x => x.CategoryId == id).ToList().Count() > 0 )//var sp=_db.Products.Where(x=>x.Id==id).FirstOrDefault();
             {
                 TempData["error"] = "Không thể xóa danh mục vì vẫn còn sản phẩm thuộc danh mục này.";
                 return RedirectToAction("Index");
