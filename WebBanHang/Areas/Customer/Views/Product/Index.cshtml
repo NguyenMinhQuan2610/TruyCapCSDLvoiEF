@@ -1,0 +1,34 @@
+﻿@using WebBanHang.Areas.Customer.Models
+@model List<Product>
+<div class="row">
+    <div id="Category-list" class="col-md-3">
+        <h3>CATEGORY LIST</h3>
+        <ul class="list-group">
+            @foreach (var x in (List<CategoryViewModel>)ViewBag.dsLoai)
+            {
+                    <a asp-action="Index" asp-route-id="@x.Id" data-id="@x.Id" class=" id-item list-group-item d-flex justify-content-between align-items-center">
+                    @x.Name
+                        <span class="badge bg-primary rounded-pill">@x.TotalProduct</span>
+                    </a>
+            }
+        </ul>
+    </div>
+   <div id="Product-list" class="col-md-9">
+        @ViewBag.Partial("LoadProduct_Partial", Model)
+</div>
+
+@section Scripts {
+        <script>
+        $(".id-item").click(function(e){
+            e.preventDefault();
+            let id = $(this).data("id");
+            $.ajax({
+                url: "/Customer/Product/LoadProduct_Partial",
+                data: {id: id},
+                success: function(data){
+                    $("#Product-list").html(data);
+                }
+            });
+        });
+        </script>
+}

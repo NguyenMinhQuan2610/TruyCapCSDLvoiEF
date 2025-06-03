@@ -7,10 +7,9 @@ using WebBanHang.Models;
 namespace WebBanHang.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles=SD.Role_Admin)]
+    [Authorize(Roles = SD.Role_Admin)]
     public class ProductController : Controller
     {
-        
         private ApplicationDbContext _db;
         private IWebHostEnvironment _hosting;
         public ProductController(ApplicationDbContext db, IWebHostEnvironment hosting)
@@ -20,7 +19,7 @@ namespace WebBanHang.Areas.Admin.Controllers
         }
 
         #region Xem_DSSP
-        public IActionResult Index(int page=1)
+        public IActionResult Index(int page = 1)
         {
             var pagesize = 5;
             var currentpage = page;
@@ -32,7 +31,7 @@ namespace WebBanHang.Areas.Admin.Controllers
             ViewBag.CurrentPage = currentpage;
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                return PartialView("ProductPatrial",dsSanPham.Skip((currentpage - 1) * pagesize).Take(pagesize).ToList());
+                return PartialView("ProductPatrial", dsSanPham.Skip((currentpage - 1) * pagesize).Take(pagesize).ToList());
             }
             return View(dsSanPham.Skip((currentpage - 1) * pagesize).Take(pagesize).ToList());
             //return View(dsSanPham);
@@ -40,7 +39,8 @@ namespace WebBanHang.Areas.Admin.Controllers
         #endregion
         //Xử lý xóa sản phẩm
         #region XuLy_Xoa
-        public IActionResult Delete(int id) {
+        public IActionResult Delete(int id)
+        {
             //1.Truy vấn sản phẩm cần xóa trong CSDL
             var sp = _db.Products.Find(id); //=> Truy vấn theo khóa chính
             //4.Điều hướng người dùng về lại action index
@@ -74,7 +74,8 @@ namespace WebBanHang.Areas.Admin.Controllers
         #endregion
         #region XuLy_ThemSp
         [HttpPost]
-        public IActionResult Add(Product product, IFormFile imageUrl) {
+        public IActionResult Add(Product product, IFormFile imageUrl)
+        {
             //if (ModelState.IsValid) {
             if (imageUrl != null)
             {
@@ -122,7 +123,7 @@ namespace WebBanHang.Areas.Admin.Controllers
         public IActionResult Update(Product product, IFormFile ImageUrl)
         {
             //B1: Truy vấn sản phẩm cần cập nhật trong CSDL
-            var OldProduct=_db.Products.Find(product.Id);
+            var OldProduct = _db.Products.Find(product.Id);
             if (ImageUrl != null)
             {
                 //xử lý upload và lưu ảnh đại diện mới
@@ -140,7 +141,7 @@ namespace WebBanHang.Areas.Admin.Controllers
             else
             {
                 product.ImageUrl = OldProduct.ImageUrl;
-               // product.ImageUrl=SaveImage(ImageUrl);
+                // product.ImageUrl=SaveImage(ImageUrl);
             }
             //cập nhật product vào table Product
             OldProduct.Name = product.Name;
@@ -153,7 +154,7 @@ namespace WebBanHang.Areas.Admin.Controllers
             return RedirectToAction("Index");
 
         }
-       
+
 
 
         //Hiển thị form cập nhật sản phẩm
@@ -163,7 +164,7 @@ namespace WebBanHang.Areas.Admin.Controllers
             //Cách 1: Dùng biểu thức có điều kiện
             //var sp = _db.Products.Where(x=>x.Id==id).SingleOrDefault();
             //Cách 2: Tìm theo khóa chính
-            var sp=_db.Products.Find(id);            
+            var sp = _db.Products.Find(id);
             //truyền danh sách thể loại cho View để sinh ra điều khiển DropDownList
             ViewBag.CategoryList = _db.Categorise.Select(x => new SelectListItem
             {

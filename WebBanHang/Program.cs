@@ -9,17 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer("name=DefaultConnection"));
-
-//builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 //builder.Services.AddDefaultIdentity<ApplicationUser>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-builder.Services.AddScoped<IEmailSender,EmailSender>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddRazorPages();
 builder.Services.ConfigureApplicationCookie(ops =>
 {
     ops.LoginPath = "/Identity/Account/Login";
     ops.AccessDeniedPath = "/Identity/Account/AccessDenied";
-    ops.LogoutPath = "//Identity/Account/Logout";
+    ops.LogoutPath = "/Identity/Account/Logout";
 });
 var app = builder.Build();
 
@@ -45,15 +43,15 @@ app.UseEndpoints(endpoints =>
     );
     endpoints.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}"
-    ); 
-endpoints.MapRazorPages();
+    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}"
+    );
+    endpoints.MapRazorPages();
 
 
 });
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Product}/{action=Index}/{id?}");
 
 app.Run();
