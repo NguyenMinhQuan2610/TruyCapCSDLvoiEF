@@ -1,21 +1,29 @@
 ﻿@model List<Product>
-<h3>PRODUCT LIST OF @ViewBag.Category_Name</h3>
-<div class="row">
-    @foreach (var x in Model)
-    {
-            <div class="card mb-3 col-md-4">
-                <h3 class="card-header">@x.Name</h3>
-                <div class="card-body">
-                    <h5 class="card-title">Price: @string.Format("{0:#,#00} VND", x.Price)</h5>
-                </div>
-            @if (!string.IsNullOrEmpty(x.ImageUrl))
-            {
-                        <img src="/@x.ImageUrl" class="img-fluid" />
-            }
-                <div class="card-footer text-muted">
-                    <a href="#" class="card-link btn btn-outline-dark">Detail</a>
-                    <a href="#" class="card-link btn btn-outline-info">Add to Card</a>
-                </div>
+@if (Model == null || !Model.Any())
+{
+            <h3 style="color:red; font-weight:bold;">Không còn sản phẩm</h3>
+}
+else
+{
+            <h3>PRODUCT LIST OF @ViewBag.Category_Name</h3>
+            <div class="row">
+        @foreach (var x in Model)
+        {
+                            <div class="card mb-3 col-md-4">
+                                <h3 class="card-header">@x.Name</h3>
+                                <div class="card-body">
+                                    <h5 class="card-title">Price: @string.Format("{0:#,#00} VND", x.Price)</h5>
+                                </div>
+                @if (!string.IsNullOrEmpty(x.ImageUrl))
+                {
+                                            <img src="/@x.ImageUrl" class="img-fluid" />
+                }
+                                <div class="card-footer text-muted">
+                                    <a href="#" class="card-link btn btn-outline-dark">Detail</a>
+                                           <a class="addtocart card-link btn btn-outline-info" data-productId="@x.Id" asp-action="AddToCart" asp-controller="Cart"
+            asp-route-productId="@x.Id"> Add to cart </a>
+                                </div>
+                            </div>
+        }
             </div>
-    }
-</div>
+}

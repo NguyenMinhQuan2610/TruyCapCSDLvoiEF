@@ -1,5 +1,4 @@
-﻿@using WebBanHang.Areas.Customer.Models
-@model List<Product>
+﻿@model List<Product>
 <div class="row">
     <div id="Category-list" class="col-md-3">
         <h3>CATEGORY LIST</h3>
@@ -13,8 +12,37 @@
             }
         </ul>
     </div>
-   <div id="Product-list" class="col-md-9">
-        @ViewBag.Partial("LoadProduct_Partial", Model)
+    <div id="Product-list" class="col-md-9">
+        @if (Model == null || !Model.Any())
+        {
+                <h3>HÔNG CÓ SẢN PHẨM NÀO HẾT </h3>
+
+        }
+        else
+        {
+            <h3>PRODUCT LIST OF @ViewBag.Category_Name</h3>
+        }
+        <div class="row">
+            @foreach (var x in Model)
+            {
+                <div class="card mb-3 col-md-4">
+                    <h3 class="card-header">@x.Name</h3>
+                    <div class="card-body">
+                        <h5 class="card-title">Price: @string.Format("{0:#,#00} VND", x.Price)</h5>
+                    </div>
+                    @if (!string.IsNullOrEmpty(x.ImageUrl))
+                    {
+                            <img src="/@x.ImageUrl" class="img-fluid" />
+                    }
+                    <div class="card-footer text-muted">
+                        <a href="#" class="card-link btn btn-outline-dark">Detail</a>
+                                 <a class="addtocart card-link btn btn-outline-info" data-productId="@x.Id" asp-action="AddToCart" asp-controller="Cart"
+                asp-route-productId="@x.Id"> Add to cart </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </div>
 
 @section Scripts {
@@ -22,6 +50,8 @@
         $(".id-item").click(function(e){
             e.preventDefault();
             let id = $(this).data("id");
+            $(".id-item").removeClass("active");
+            $(this).addClass("active");
             $.ajax({
                 url: "/Customer/Product/LoadProduct_Partial",
                 data: {id: id},

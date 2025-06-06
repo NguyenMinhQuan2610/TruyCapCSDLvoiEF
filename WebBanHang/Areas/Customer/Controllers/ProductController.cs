@@ -24,7 +24,10 @@ namespace WebBanHang.Areas.Customer.Controllers
                     TotalProduct = _db.Products.Where(p => p.CategoryId == c.Id).Count()
                 })
                 .ToList();
-            var dsSanPham = _db.Products.Where(x => x.CategoryId == id).ToList();
+            var dsSanPham = _db.Products
+        .Where(x => x.CategoryId == id)
+        .OrderBy(x => x.Price) 
+        .ToList();
 
             //Truyền qua View
             ViewBag.dsLoai = dsLoai;

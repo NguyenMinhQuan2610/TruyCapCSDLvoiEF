@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using WebBanHang.Models;
 
 namespace WebBanHang.Areas.Identity.Pages.Account
@@ -31,7 +32,7 @@ namespace WebBanHang.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<IdentityRole> _rolemanager;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -47,7 +48,7 @@ namespace WebBanHang.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            _roleManager = roleManager;
+            _rolemanager = roleManager;
         }
 
         /// <summary>
@@ -113,15 +114,18 @@ namespace WebBanHang.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            if (_roleManager.RoleExistsAsync(SD.Role_Admin).GetAwaiter().GetResult()) { 
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
-                
-            }
-            Input = new InputModel()
+            if (!_rolemanager.RoleExistsAsync(SD.Role_Admin).GetAwaiter().GetResult())
             {
-                RoleList = _roleManager.Roles.Select(x => new SelectListItem {Text=x.Name,Value=x.Name })
-
+                _rolemanager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
+                _rolemanager.CreateAsync(new IdentityRole(SD.Role_Cust)).GetAwaiter().GetResult();
+                _rolemanager.CreateAsync(new IdentityRole(SD.Role_Empl)).GetAwaiter().GetResult();
+            }
+            //Lấy danh sách role
+            Input = new InputModel
+            {
+                RoleList = _rolemanager.Roles.Select(x => new SelectListItem { Value = x.Name, Text = x.Name })
             };
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -141,6 +145,7 @@ namespace WebBanHang.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+                    //Chèn code gán Role cho User
                     if (!string.IsNullOrEmpty(Input.Role))
                     {
                         _userManager.AddToRoleAsync(user, Input.Role).GetAwaiter().GetResult();
@@ -150,6 +155,7 @@ namespace WebBanHang.Areas.Identity.Pages.Account
                         _userManager.AddToRoleAsync(user, SD.Role_Cust).GetAwaiter().GetResult();
 
                     }
+
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

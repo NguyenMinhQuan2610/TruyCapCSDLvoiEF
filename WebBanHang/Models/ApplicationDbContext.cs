@@ -10,6 +10,8 @@ namespace WebBanHang.Models
         {
                 
         }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Category> Categorise { get; set; }
         public DbSet<Product> Products { set; get; }
 

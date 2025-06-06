@@ -4,32 +4,35 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 <div class="row products">
     <partial name="_ProductPartial" />
 </div>
 <div class="text-center"> 
-    <button id="btnLoadMore" class="btn-btn-primary">Load More</button>
+    <button id="btnLoadMore" class="btn btn-primary">Load More</button>
 </div>
 
 <!-- viet script để sử dụng ajax với thư viện JQuery -->
-@section Scripts{
-    <script>
-        let currentPage=2;
-        $("#btnLoadMore").click(function(){
-            //Dùng hàm ajax của JQuery
-            $.ajax({
-                url:"/Home/LoadMore",
-                data: {page:currentPage},
-                success: function (data){
-                    if($.trim(data) === ' ')
-                     $("#btnLoadMore").hide();
-                    else
-                      $(".products").append(data);
-                }
-                });
+@section Scripts {
+        <script>
+            let currentPage = 2;
+            $("#btnLoadMore").click(function () {
+                loadPage(currentPage);
                 currentPage++;
-        });
-    </script>
+            });
+
+            let loadPage = (page) => {
+                $.ajax({
+                    url: 'Customer/Home/LoadMore',
+                    data: { page: page },
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $('.products').append(data);
+                        } else {
+                            $('#btnLoadMore').hide();
+                        }
+                    }
+                });
+            }
+        </script>
 }

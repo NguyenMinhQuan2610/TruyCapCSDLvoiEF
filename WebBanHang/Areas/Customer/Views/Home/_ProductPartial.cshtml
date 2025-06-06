@@ -20,7 +20,8 @@
           </div>
           <div class="card-body">
             <a href="#" class="card-link">Detail</a>
-            <a href="#" class="card-link">Add to Cart</a>
+                        <a class="addtocart card-link btn btn-outline-info" data-productId="@p.Id" asp-action="AddToCart" asp-controller="Cart"
+    asp-route-productId="@p.Id"> Add to cart </a>
           </div>
           <div class="card-footer text-muted">
             2 days ago

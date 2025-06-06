@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebBanHang.Models;
@@ -19,16 +19,18 @@ namespace WebBanHang.Controllers
         public IActionResult Index()
         {
             var pageSize = 3;
-            var dsSanPham = _db.Products.Include(x => x.Category ).ToList();
+                var dsSanPham = _db.Products.Include(x => x.Category ).ToList();
             return View(dsSanPham.Skip(0).Take(pageSize).ToList());
         }
 
-        public IActionResult LoadMore(int page=2)
+
+        public IActionResult LoadMore(int page = 1)
         {
             var pageSize = 3;
-            var dsSanPham = _db.Products.Include(x => x.Category).ToList();
-            return PartialView("_ProductPartial",dsSanPham.Skip((page-1)*pageSize).Take(pageSize).ToList());
+            var products = _db.Products.ToList();
+            return PartialView("_ProductPartial", products.Skip((page - 1) * pageSize).Take(pageSize).ToList());
         }
+
 
         public IActionResult Privacy()
         {
